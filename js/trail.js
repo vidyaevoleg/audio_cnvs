@@ -10,7 +10,7 @@ function smoothTrail (c, cw, ch) {
 
   this.ctx = c.getContext('2d');
   this.trail = [];
-  this.maxTrail = 10;
+  this.maxTrail = 100;
   this.for_splice = 1;
   
   this.mouseDown = false;
@@ -18,8 +18,7 @@ function smoothTrail (c, cw, ch) {
   this.ctx.lineWidth = .2;
   this.ctx.lineJoin = 'miter';
 
-  this.radius = 300;
-  this.radius_delta = 1;
+  this.radius = 100;
   
   this.speed = 0.01;
   this.delta_speed = (Math.PI / 8);
@@ -47,36 +46,16 @@ function smoothTrail (c, cw, ch) {
     this.angle += (this.seconds / 15) * this.delta_speed;
     // console.log(this.angle)
     
-    // // задается увеличение радиуса
-
-    if (this.radius <= 10){
-      this.growRadius = true;
-    } else if (this.radius >= 400) { 
-      this.growRadius = false;
-    } 
-    
-    // увеличиваем/уменьшаем радиус в зависимости от this.growRadius 
-
-    if (this.growRadius) {
-      this.radius += this.radius_delta; 
-    } else {
-      this.radius -= this.radius_delta; 
-    }
   }
 
 
-  this.randomizeParams = function () {
-    setTimeout(function () {
-      _this.ctx.lineWidth = randIt([0.1, 1.0]);
-      _this.opacity_bool = randIt([true, false, true, true]);
-      // _this.angle = randIt(0);
-      
-      function randIt (ar) {
-        rand = Math.round(Math.random() * ar.length);
-        return ar[rand];
-      }
-    }, 500)
+  this.randomizeParams = function (freq) {
+    var 
+      lineWidth = (Math.abs(freq - 110)).toFixed(1),
+      radius = 1.5 * freq;
 
+    _this.ctx.lineWidth = lineWidth;
+    _this.radius = radius;
 
   }
     
@@ -112,9 +91,15 @@ function smoothTrail (c, cw, ch) {
       while(i--){
         var 
           point = this.trail[i],
-          nextPoint = (i == this.trail.length) ? this.trail[i+1] : this.trail[i];
-        
-        this.ctx.quadraticCurveTo(Math.round(this.arcx), Math.round(this.arcy), this.horizonter * nextPoint.x, this.horizonter * nextPoint.y);
+          nextPoint = (i == this.trail.length) ? this.trail[i+1] : this.trail[i],
+          x_0 = Math.round(point.x), 
+          y_0 = Math.round(point.y),
+          x = nextPoint.x,
+          y = nextPoint.y; 
+
+        this.ctx.moveTo(x_0, y_0);
+        this.ctx.lineTo(x, y);
+        // this.ctx.quadraticCurveTo(Math.round(this.arcx), Math.round(this.arcy), this.horizonter * nextPoint.x, this.horizonter * nextPoint.y);
       }
 
       this.ctx.strokeStyle = 'hsla(' + this.rand(170,300) + ', 100%, ' + this.rand(50, 75) + '%, 1)'; 

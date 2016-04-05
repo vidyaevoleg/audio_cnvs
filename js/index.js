@@ -90,14 +90,24 @@ function setUpAudio() {
 
 
 function render () {
-  var freqArray = new Uint8Array(analyser.frequencyBinCount);
+  var 
+    freqArray = new Uint8Array(analyser.frequencyBinCount),
+    arrayOfFreq = [],
+    freq;
 
   analyser.getByteTimeDomainData(freqArray);
-  debugger
-  freq = freqArray.uniq()[0];
-  console.log(freq)
+
+  for (var i = 0; i < freqArray.length; i++) {
+    var v = freqArray[i];
+    arrayOfFreq.push(v);
+  }
+
+  freq = parseInt(arrayOfFreq.uniq()[0]) 
+
   trail.clearCanvas();
   // получаем координаты следующей точки
+  trail.randomizeParams(freq);
+
   trail.updateArc();
   // добавляем следующую точку в поезд ( если превышена максимальная длина - то удаляем forSplice)
   trail.updateTrail();
