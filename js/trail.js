@@ -10,7 +10,7 @@ function smoothTrail (c, cw, ch) {
 
   this.ctx = c.getContext('2d');
   this.trail = [];
-  this.maxTrail = 100;
+  this.maxTrail = 200;
   this.for_splice = 1;
   
   this.mouseDown = false;
@@ -109,12 +109,9 @@ function smoothTrail (c, cw, ch) {
   }   
  
   this.clearCanvas = function(){
-    //  убирать первую строчку 
-    if (this.opacity_bool) {
-      this.ctx.globalCompositeOperation = 'destination-out';
-    }
+    this.ctx.globalCompositeOperation = 'destination-atop';
     this.ctx.fillStyle = 'rgba(0,0,0,.1)';
     this.ctx.fillRect(0, 0, this.cw, this.ch);          
-    this.ctx.globalCompositeOperation = 'lighter';
+    this.ctx.globalCompositeOperation = 'luminosity';
   }
 }

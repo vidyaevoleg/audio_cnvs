@@ -45,10 +45,10 @@ var analyser, trail;
 
 window.onload = function() {
   setUpAudio();
-  setUpCanvas(); 
+  setUpAnimation(); 
 };
 
-function setUpCanvas() {
+function setUpAnimation() {
   var c = document.createElement('canvas');
   c.width = window.innerWidth;
   c.height = window.innerHeight;      
@@ -105,13 +105,9 @@ function render () {
   freq = parseInt(arrayOfFreq.uniq()[0]) 
 
   trail.clearCanvas();
-  // получаем координаты следующей точки
   trail.randomizeParams(freq);
-
   trail.updateArc();
-  // добавляем следующую точку в поезд ( если превышена максимальная длина - то удаляем forSplice)
   trail.updateTrail();
-  // соеденяем все точки trail крививы Безье
   trail.renderTrail();
 
   requestAnimationFrame(render);
