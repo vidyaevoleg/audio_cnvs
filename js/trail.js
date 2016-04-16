@@ -1,32 +1,34 @@
-var smoothTrail;
+var Trail;
 
-smoothTrail = function(c, cw, ch) {
-  var _this;
-  _this = this;
-  this.c = c;
-  this.cw = cw;
-  this.ch = ch;
-  this.mx = 0;
-  this.my = 0;
-  this.ctx = c.getContext('2d');
-  this.trail = [];
-  this.maxTrail = 500;
-  this.for_splice = 1;
-  this.mouseDown = false;
-  this.ctx.lineWidth = .2;
-  this.ctx.lineJoin = 'miter';
-  this.radius = 100;
-  this.speed = 0.01;
-  this.delta_speed = Math.PI / 8;
-  this.angle = 0;
-  this.arcx = 0;
-  this.arcy = 0;
-  this.opacity_bool = true;
-  this.growRadius = true;
-  this.horizonter = 1;
-  this.seconds = 0;
-  this.milliseconds = 0;
-  this.updateArc = function() {
+Trail = (function() {
+  function Trail(c, cw, ch) {
+    var angle, arcx, arcy, ctx, delta_speed, for_splice, growRadius, horizonter, maxTrail, milliseconds, mouseDown, mx, my, opacity_bool, radius, seconds, speed, trail;
+    c = c;
+    cw = cw;
+    ch = ch;
+    mx = 0;
+    my = 0;
+    ctx = c.getContext('2d');
+    trail = [];
+    maxTrail = 500;
+    for_splice = 1;
+    mouseDown = false;
+    ctx.lineWidth = .2;
+    ctx.lineJoin = 'miter';
+    radius = 100;
+    speed = 0.01;
+    delta_speed = Math.PI / 8;
+    angle = 0;
+    arcx = 0;
+    arcy = 0;
+    opacity_bool = true;
+    growRadius = true;
+    horizonter = 1;
+    seconds = 0;
+    milliseconds = 0;
+  }
+
+  Trail.prototype.updateArc = function() {
     var d;
     d = new Date;
     this.arcx = this.cw / 2 + Math.sin(this.angle) * this.radius;
@@ -35,26 +37,27 @@ smoothTrail = function(c, cw, ch) {
     this.milliseconds = d.getMilliseconds();
     this.angle += this.seconds / 15 * this.delta_speed;
   };
-  this.randomizeParams = function(freq) {
+
+  Trail.prototype.randomizeParams = function(freq) {
     var lineWidth, radius;
     lineWidth = Math.abs(freq - 110).toFixed(1);
     radius = 1.5 * freq;
     _this.ctx.lineWidth = lineWidth;
     _this.radius = radius;
   };
-  this.rand = function(rMi, rMa) {
+
+  Trail.prototype.rand = function(rMi, rMa) {
     return ~~(Math.random() * (rMa - rMi + 1) + rMi);
   };
-  this.hitTest = function(x1, y1, w1, h1, x2, y2, w2, h2) {
-    return !(x1 + w1 < x2 || x2 + w2 < x1 || y1 + h1 < y2 || y2 + h2 < y1);
-  };
-  this.createPoint = function(x, y) {
+
+  Trail.prototype.createPoint = function(x, y) {
     this.trail.push({
       x: x,
       y: y
     });
   };
-  this.updateTrail = function() {
+
+  Trail.prototype.updateTrail = function() {
     console.log(this.trail.length);
     if (this.trail.length < this.maxTrail) {
       this.createPoint(this.arcx, this.arcy);
@@ -62,7 +65,8 @@ smoothTrail = function(c, cw, ch) {
       this.trail.splice(0, this.for_splice);
     }
   };
-  this.draw = function() {
+
+  Trail.prototype.draw = function() {
     var i, nextPoint, point, x, x_0, y, y_0;
     i = this.trail.length;
     this.ctx.beginPath();
@@ -80,17 +84,22 @@ smoothTrail = function(c, cw, ch) {
     this.ctx.stroke();
     this.ctx.closePath();
   };
-  this.clearCanvas = function() {
+
+  Trail.prototype.clear = function() {
     this.ctx.globalCompositeOperation = 'destination-atop';
     this.ctx.fillStyle = 'rgba(0,0,0,.1)';
     this.ctx.fillRect(0, 0, this.cw, this.ch);
     this.ctx.globalCompositeOperation = 'luminosity';
   };
-  this.update = function(freq) {
-    this.clearCanvas();
+
+  Trail.prototype.update = function(freq) {
+    this.clear();
     this.randomizeParams(freq);
     this.updateArc();
     this.updateTrail();
-    return this.draw();
+    this.draw();
   };
-};
+
+  return Trail;
+
+})();

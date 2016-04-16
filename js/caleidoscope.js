@@ -14,7 +14,7 @@ Kaleidoscope = (function() {
       offsetX: 0.0,
       offsetY: 0.0,
       default_radius: 300,
-      slices: 20,
+      slices: 16,
       zoom: 1.0,
       ease: 0.1
     };
@@ -60,17 +60,18 @@ Kaleidoscope = (function() {
       hx = dx - 0.5;
     }
     hy = dy - 0.5;
-    this.tx = hx * this.radius * -2;
-    this.ty = hy * this.radius * 2;
+    this.ease = dx / 5;
+    this.tx = 2 * (hx * this.radius * -2);
+    this.ty = 2 * (hy * this.radius * 2);
     delta = this.tr - this.offsetRotation;
     theta = Math.atan2(Math.sin(delta), Math.cos(delta));
     this.offsetX += (this.tx - this.offsetX) * this.ease;
     this.offsetY += (this.ty - this.offsetY) * this.ease;
     this.offsetRotation += (theta - this.offsetRotation) * this.ease;
-    return this.draw();
+    return this.draw(freq);
   };
 
-  Kaleidoscope.prototype.draw = function() {
+  Kaleidoscope.prototype.draw = function(freq) {
     var cx, i, index, ref, results, scale, step;
     this.canvas.width = this.canvas.height = this.radius * 2;
     this.context.fillStyle = this.context.createPattern(this.image, 'repeat');
@@ -84,7 +85,7 @@ Kaleidoscope = (function() {
       this.context.rotate(index * step);
       this.context.beginPath();
       this.context.moveTo(-0.5, -0.5);
-      this.context.arc(0, 0, this.radius, step * -0.51, step * 0.51);
+      this.context.arc(0, 0, this.radius, step * -(freq / 512), step * (freq / 512));
       this.context.lineTo(0.5, 0.5);
       this.context.closePath();
       this.context.rotate(this.HALF_PI);

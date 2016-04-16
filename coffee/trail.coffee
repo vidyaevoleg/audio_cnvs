@@ -89,5 +89,5 @@ class Trail
     @updateArc()
     @updateTrail()
     @draw()  
+    return
 
-  return

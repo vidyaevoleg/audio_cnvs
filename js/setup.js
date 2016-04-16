@@ -1,4 +1,4 @@
-var Setup, analyser, kaleidoscope, setup, trail;
+var Setup, analyser, incZoom, kaleidoscope, setup, trail, zoom;
 
 trail = void 0;
 
@@ -7,6 +7,18 @@ kaleidoscope = void 0;
 analyser = void 0;
 
 setup = void 0;
+
+zoom = 1;
+
+window.parent.document.body.style.zoom = zoom;
+
+incZoom = function() {
+  return setTimeout(function() {
+    zoom += 0.013;
+    window.parent.document.body.style.zoom = zoom;
+    return incZoom();
+  }, 700);
+};
 
 Setup = (function() {
   function Setup() {}
@@ -32,7 +44,7 @@ Setup = (function() {
   Setup.prototype.renderKaleidoscope = function(canvas) {
     var image;
     image = new Image;
-    image.src = 'https://s-media-cache-ak0.pinimg.com/564x/f9/25/d4/f925d4319416498bfd2267adec580a7b.jpg';
+    image.src = 'https://s-media-cache-ak0.pinimg.com/564x/7a/09/82/7a09821f4f68dcb58066dcd8561e94e4.jpg';
     kaleidoscope = new Kaleidoscope({
       image: image,
       canvas: canvas
@@ -46,9 +58,10 @@ Setup = (function() {
 
   Setup.prototype.renderAudio = function() {
     var audioInput;
-    audioInput = document.getElementById('audiofile');
-    audioInput.addEventListener('change', function(event) {
+    audioInput = $('#audiofile');
+    audioInput.on('change', function(event) {
       var audio, audioContext, sourceNode, stream;
+      $(this).fadeOut(500);
       stream = URL.createObjectURL(event.target.files[0]);
       audio = new Audio;
       audio.src = stream;
@@ -61,6 +74,7 @@ Setup = (function() {
       sourceNode.connect(audioContext.destination);
       audio.play();
       setup.renderAll();
+      incZoom();
     });
   };
 

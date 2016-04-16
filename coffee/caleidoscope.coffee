@@ -11,7 +11,7 @@ class Kaleidoscope
       offsetX: 0.0
       offsetY: 0.0
       default_radius: 300
-      slices: 20
+      slices: 16
       zoom: 1.0
       ease: 0.1
         
@@ -38,7 +38,7 @@ class Kaleidoscope
 
     amplitude = 256
 
-    dx = freq / amplitude
+    dx =  freq / amplitude
     dy = (amplitude - freq) / amplitude
 
     if dx > dy
@@ -48,17 +48,20 @@ class Kaleidoscope
     
     hy = dy - 0.5
 
-    @tx = hx * @radius * -2
-    @ty = hy * @radius * 2
+    @ease = dx / 5
+
+    @tx = 2 * (hx * @radius * -2)
+    @ty = 2 * (hy * @radius * 2)
+
+    
     delta = @tr - @offsetRotation
     theta = Math.atan2( Math.sin(delta), Math.cos(delta) )
-                
     @offsetX += ( @tx - @offsetX ) * @ease
     @offsetY += ( @ty - @offsetY ) * @ease
     @offsetRotation += ( theta - @offsetRotation ) * @ease
-    @draw()
+    @draw freq
 
-  draw: ->
+  draw: (freq) ->
     @canvas.width = @canvas.height = @radius * 2
     @context.fillStyle = @context.createPattern @image, 'repeat'
     
@@ -74,7 +77,7 @@ class Kaleidoscope
       
       @context.beginPath()
       @context.moveTo -0.5, -0.5
-      @context.arc 0, 0, @radius, step * -0.51, step * 0.51
+      @context.arc 0, 0, @radius, step * -(freq/512), step * (freq/512)
       @context.lineTo 0.5, 0.5
       @context.closePath()
       
