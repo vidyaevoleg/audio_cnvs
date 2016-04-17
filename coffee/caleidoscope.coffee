@@ -59,9 +59,9 @@ class Kaleidoscope
     @offsetX += ( @tx - @offsetX ) * @ease
     @offsetY += ( @ty - @offsetY ) * @ease
     @offsetRotation += ( theta - @offsetRotation ) * @ease
-    @draw freq
+    @draw()
 
-  draw: (freq) ->
+  draw: ->
     @canvas.width = @canvas.height = @radius * 2
     @context.fillStyle = @context.createPattern @image, 'repeat'
     
@@ -77,7 +77,7 @@ class Kaleidoscope
       
       @context.beginPath()
       @context.moveTo -0.5, -0.5
-      @context.arc 0, 0, @radius, step * -(freq/512), step * (freq/512)
+      @context.arc 0, 0, @radius, step * -0.51, step * 0.51
       @context.lineTo 0.5, 0.5
       @context.closePath()
       

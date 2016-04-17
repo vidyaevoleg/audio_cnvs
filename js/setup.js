@@ -44,7 +44,7 @@ Setup = (function() {
   Setup.prototype.renderKaleidoscope = function(canvas) {
     var image;
     image = new Image;
-    image.src = 'https://s-media-cache-ak0.pinimg.com/564x/7a/09/82/7a09821f4f68dcb58066dcd8561e94e4.jpg';
+    image.src = 'https://s-media-cache-ak0.pinimg.com/564x/45/71/3d/45713d365e7e637ecb58abe77c3c6dbb.jpg';
     kaleidoscope = new Kaleidoscope({
       image: image,
       canvas: canvas
